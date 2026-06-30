@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notifications</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .container {
+            width: 700px;
+            margin: 50px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1E3A8A;
+            margin-bottom: 25px;
+        }
+
+        .notification {
+            background: #EEF2FF;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 6px solid #1E3A8A;
+        }
+
+        .notification p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .time {
+            color: #555;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: block;
+            width: 180px;
+            margin: 25px auto 0;
+            background: #FFB703;
+            color: black;
+            padding: 13px;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>My Notifications</h2>
+
+    <div th:if="${#lists.isEmpty(notifications)}">
+        <p class="empty">No notifications yet.</p>
+    </div>
+
+    <div class="notification" th:each="notification : ${notifications}">
+        <p th:text="${notification.message}"></p>
+        <div class="time" th:text="${notification.createdAt}"></div>
+    </div>
+
+    <a href="/" class="btn">Back Home</a>
+
+</div>
+
+</body>
+</html>

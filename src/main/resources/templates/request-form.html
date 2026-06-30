@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit Request</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .container {
+            width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1E3A8A;
+            margin-bottom: 25px;
+        }
+
+        .user-box {
+            background: #DCFCE7;
+            color: #166534;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            margin-top: 25px;
+            background: #FFB703;
+            color: black;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .back-btn {
+            display: block;
+            width: 180px;
+            margin: 20px auto 0;
+            background: #FFB703;
+            color: black;
+            padding: 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Submit Campus Service Request</h2>
+
+    <div class="user-box" th:if="${loggedUser != null}">
+        Logged in as: <span th:text="${loggedUser.name}"></span>
+    </div>
+
+    <form action="/student/request" method="post">
+
+        <label>Request Type</label>
+        <select name="requestType" required>
+            <option value="">Select Request Type</option>
+            <option value="IT_SUPPORT">IT Support</option>
+            <option value="ID_CARD">ID Card</option>
+            <option value="LIBRARY">Library</option>
+            <option value="CERTIFICATE">Certificate</option>
+            <option value="COMPLAINT">Complaint</option>
+            <option value="LOST_ITEM">Lost Item</option>
+        </select>
+
+        <label>Title</label>
+        <input type="text" name="title" required>
+
+        <label>Description</label>
+        <textarea name="description" required></textarea>
+
+        <button type="submit" class="submit-btn">Submit Request</button>
+
+    </form>
+
+    <a href="/" class="back-btn">Back Home</a>
+
+</div>
+
+</body>
+</html>

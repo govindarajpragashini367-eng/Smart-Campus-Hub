@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Profile</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+        }
+
+        .container {
+            width: 450px;
+            margin: 70px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1E3A8A;
+            margin-bottom: 25px;
+        }
+
+        .info-box {
+            background: #EEF2FF;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        input {
+            padding: 12px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 13px;
+            background: #FFB703;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #FB8500;
+            color: white;
+        }
+
+        .success {
+            color: #16A34A;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: block;
+            width: 180px;
+            margin: 20px auto 0;
+            text-align: center;
+            background: #1E3A8A;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Student Profile</h2>
+
+    <p class="success" th:text="${success}"></p>
+
+    <div class="info-box">
+        <p><b>Email:</b> <span th:text="${user.email}"></span></p>
+        <p><b>Role:</b> <span th:text="${user.role}"></span></p>
+    </div>
+
+    <form action="/student/profile/update" method="post">
+
+        <label>Name</label>
+        <input type="text" name="name" th:value="${user.name}" required>
+
+        <label>New Password</label>
+        <input type="password" name="password" placeholder="Leave blank to keep old password">
+
+        <button type="submit">Update Profile</button>
+
+    </form>
+
+    <a href="/" class="btn">Back Home</a>
+
+</div>
+
+</body>
+</html>

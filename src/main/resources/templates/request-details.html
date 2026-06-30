@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Request Details</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Request Details</h2>
+
+    <div class="card">
+        <p><b>Student:</b> <span th:text="${request.studentName}"></span></p>
+        <p><b>Email:</b> <span th:text="${request.studentEmail}"></span></p>
+        <p><b>Type:</b> <span th:text="${request.requestType}"></span></p>
+        <p><b>Title:</b> <span th:text="${request.title}"></span></p>
+        <p><b>Description:</b> <span th:text="${request.description}"></span></p>
+        <p><b>Created:</b> <span th:text="${request.createdAt}"></span></p>
+    </div>
+
+    <form th:action="@{/admin/request/update/{id}(id=${request.id})}" method="post">
+
+        <label>Assign Department</label>
+        <input type="text" name="department" th:value="${request.department}" placeholder="Example: IT Department">
+
+        <label>Status</label>
+        <select name="status">
+            <option th:each="status : ${statuses}"
+                    th:value="${status}"
+                    th:text="${status}"
+                    th:selected="${status == request.status}">
+            </option>
+        </select>
+
+        <label>Admin Comment</label>
+        <textarea name="adminComment" th:text="${request.adminComment}"></textarea>
+
+        <button type="submit">Update Request</button>
+    </form>
+
+    <a class="back" href="/admin/requests">Back</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Requests</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial,sans-serif;
+            background:#f4f7fb;
+        }
+
+        .container{
+            width:95%;
+            margin:30px auto;
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h1{
+            text-align:center;
+            color:#1E3A8A;
+        }
+
+        .welcome{
+            text-align:center;
+            color:#16A34A;
+            font-weight:bold;
+            margin-bottom:20px;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            background:#1E3A8A;
+            color:white;
+            padding:12px;
+        }
+
+        td{
+            padding:12px;
+            text-align:center;
+            border-bottom:1px solid #ddd;
+        }
+
+        tr:hover{
+            background:#f9f9f9;
+        }
+
+        .status{
+            background:#DBEAFE;
+            padding:6px 10px;
+            border-radius:20px;
+            color:#1E3A8A;
+            font-weight:bold;
+        }
+
+        .home-btn{
+            display:block;
+            width:180px;
+            margin:25px auto;
+            text-align:center;
+            text-decoration:none;
+            background:#FFB703;
+            color:black;
+            padding:12px;
+            border-radius:8px;
+            font-weight:bold;
+        }
+
+        .empty{
+            text-align:center;
+            color:#666;
+            font-weight:bold;
+            padding:20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>My Service Requests</h1>
+
+    <p class="welcome">
+        Welcome,
+        <span th:text="${loggedUser.name}"></span>
+    </p>
+
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Department</th>
+            <th>Admin Comment</th>
+        </tr>
+
+        <tr th:if="${#lists.isEmpty(requests)}">
+            <td colspan="6" class="empty">
+                No requests submitted yet
+            </td>
+        </tr>
+
+        <tr th:each="request : ${requests}">
+
+            <td th:text="${request.id}"></td>
+
+            <td th:text="${request.requestType}"></td>
+
+            <td th:text="${request.title}"></td>
+
+            <td>
+                <span class="status"
+                      th:text="${request.status}">
+                </span>
+            </td>
+
+            <td th:text="${request.department}"></td>
+
+            <td th:text="${request.adminComment}"></td>
+
+        </tr>
+
+    </table>
+
+    <a href="/" class="home-btn">
+        Back Home
+    </a>
+
+</div>
+
+</body>
+</html>

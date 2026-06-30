@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body{
+            margin:0;
+            font-family:Arial,sans-serif;
+            background:#f4f7fb;
+        }
+
+        .container{
+            width:95%;
+            margin:30px auto;
+        }
+
+        h1{
+            color:#1E3A8A;
+            text-align:center;
+            margin-bottom:25px;
+        }
+
+        .search-bar{
+            display:flex;
+            gap:10px;
+            margin-bottom:25px;
+        }
+
+        .search-bar input{
+            flex:1;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:8px;
+        }
+
+        .search-btn{
+            background:#1E3A8A;
+            color:white;
+            border:none;
+            padding:12px 20px;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+        }
+
+        .dashboard-cards{
+            display:grid;
+            grid-template-columns:repeat(5,1fr);
+            gap:20px;
+            margin-bottom:30px;
+        }
+
+        .card{
+            padding:25px;
+            border-radius:15px;
+            text-align:center;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2{
+            color:#1E3A8A;
+            font-size:40px;
+            margin:0;
+        }
+
+        .card p{
+            font-weight:bold;
+            margin-top:10px;
+        }
+
+        .total{ background:#EEF2FF; }
+        .pending{ background:#FEF3C7; }
+        .progress{ background:#DBEAFE; }
+        .completed{ background:#DCFCE7; }
+        .rejected{ background:#FEE2E2; }
+
+        .chart-box{
+            background:white;
+            padding:25px;
+            border-radius:15px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom:30px;
+        }
+
+        .chart-box h2{
+            text-align:center;
+            color:#1E3A8A;
+            margin-bottom:20px;
+        }
+
+        .chart-wrapper{
+            width:70%;
+            margin:auto;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            background:white;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            border-radius:12px;
+            overflow:hidden;
+        }
+
+        th{
+            background:#1E3A8A;
+            color:white;
+            padding:15px;
+        }
+
+        td{
+            padding:12px;
+            text-align:center;
+            border-bottom:1px solid #eee;
+        }
+
+        tr:hover{
+            background:#f9f9f9;
+        }
+
+        .view-btn{
+            background:#FFB703;
+            color:black;
+            text-decoration:none;
+            padding:8px 14px;
+            border-radius:6px;
+            font-weight:bold;
+        }
+
+        .delete-btn{
+            background:#EF4444;
+            color:white;
+            text-decoration:none;
+            padding:8px 14px;
+            border-radius:6px;
+            font-weight:bold;
+        }
+
+        .home-btn{
+            display:block;
+            width:180px;
+            margin:25px auto;
+            text-align:center;
+            text-decoration:none;
+            background:#1E3A8A;
+            color:white;
+            padding:12px;
+            border-radius:8px;
+            font-weight:bold;
+        }
+
+        .status{
+            background:#DBEAFE;
+            color:#1E3A8A;
+            padding:6px 10px;
+            border-radius:20px;
+            font-weight:bold;
+            font-size:13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Admin Dashboard - Service Requests</h1>
+
+    <form action="/admin/search" method="get" class="search-bar">
+        <input type="text"
+               name="keyword"
+               placeholder="Search by student name, email or title"
+               th:value="${keyword}">
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+
+    <div class="dashboard-cards">
+
+        <div class="card total">
+            <h2 th:text="${totalRequests}">0</h2>
+            <p>Total Requests</p>
+        </div>
+
+        <div class="card pending">
+            <h2 th:text="${pendingRequests}">0</h2>
+            <p>Pending</p>
+        </div>
+
+        <div class="card progress">
+            <h2 th:text="${inProgressRequests}">0</h2>
+            <p>In Progress</p>
+        </div>
+
+        <div class="card completed">
+            <h2 th:text="${completedRequests}">0</h2>
+            <p>Completed</p>
+        </div>
+
+        <div class="card rejected">
+            <h2 th:text="${rejectedRequests}">0</h2>
+            <p>Rejected</p>
+        </div>
+
+    </div>
+
+    <div class="chart-box">
+        <h2>Request Status Analytics</h2>
+        <div class="chart-wrapper">
+            <canvas id="requestChart"></canvas>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Student</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Department</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr th:if="${#lists.isEmpty(requests)}">
+            <td colspan="8">No Requests Available</td>
+        </tr>
+
+        <tr th:each="request : ${requests}">
+            <td th:text="${request.id}"></td>
+            <td th:text="${request.studentName}"></td>
+            <td th:text="${request.studentEmail}"></td>
+            <td th:text="${request.requestType}"></td>
+            <td th:text="${request.title}"></td>
+            <td>
+                <span class="status" th:text="${request.status}"></span>
+            </td>
+            <td th:text="${request.department}"></td>
+            <td>
+                <a class="view-btn"
+                   th:href="@{/admin/request/{id}(id=${request.id})}">
+                    View
+                </a>
+
+                <a class="delete-btn"
+                   th:href="@{/admin/request/delete/{id}(id=${request.id})}"
+                   onclick="return confirm('Are you sure you want to delete this request?')">
+                    Delete
+                </a>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <a href="/" class="home-btn">Back Home</a>
+
+</div>
+
+<script th:inline="javascript">
+    let pending = [[${pendingRequests}]];
+    let inProgress = [[${inProgressRequests}]];
+    let completed = [[${completedRequests}]];
+    let rejected = [[${rejectedRequests}]];
+
+    const ctx = document.getElementById('requestChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Pending', 'In Progress', 'Completed', 'Rejected'],
+            datasets: [{
+                label: 'Number of Requests',
+                data: [pending, inProgress, completed, rejected],
+                backgroundColor: [
+                    '#FEF3C7',
+                    '#DBEAFE',
+                    '#DCFCE7',
+                    '#FEE2E2'
+                ],
+                borderColor: [
+                    '#F59E0B',
+                    '#2563EB',
+                    '#16A34A',
+                    '#EF4444'
+                ],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

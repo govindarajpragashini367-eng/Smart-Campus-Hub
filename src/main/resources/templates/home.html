@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Smart Campus Hub</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1E3A8A, #2563EB);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-card {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            width: 750px;
+        }
+
+        h1 {
+            color: #1E3A8A;
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .welcome {
+            color: #16A34A;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .buttons {
+            margin-top: 25px;
+        }
+
+        .buttons a {
+            display: inline-block;
+            background: #FFB703;
+            color: black;
+            padding: 12px 25px;
+            margin: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout {
+            background: #EF4444 !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="hero-card">
+
+        <h1>Smart Campus Service Hub</h1>
+
+        <p>
+            A Spring Boot OOP system for managing student service requests.
+        </p>
+
+        <p class="welcome" th:if="${loggedUser != null}">
+            Welcome,
+            <span th:text="${loggedUser.name}"></span>
+        </p>
+
+        <div class="buttons">
+
+            <!-- Guest User -->
+            <div th:if="${loggedUser == null}">
+                <a href="/student/request">Submit Request</a>
+                <a href="/admin-login">Admin Login</a>
+                <a href="/register">Register</a>
+                <a href="/login">Login</a>
+            </div>
+
+            <!-- Student -->
+            <div th:if="${loggedUser != null and loggedUser.role == 'STUDENT'}">
+                <a href="/student/request">Submit Request</a>
+                <a href="/student/my-requests">My Requests</a>
+                <a href="/student/profile">Profile</a>
+                <a href="/student/notifications">
+                    Notifications
+                    <span th:if="${notificationCount != null and notificationCount > 0}"
+                          th:text="'(' + ${notificationCount} + ')'">
+    </span>
+                </a>
+                <a class="logout" href="/logout">Logout</a>
+            </div>
+
+            <!-- Admin -->
+            <div th:if="${loggedUser != null and loggedUser.role == 'ADMIN'}">
+                <a href="/admin/requests">Admin Dashboard</a>
+                <a class="logout" href="/logout">Logout</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
